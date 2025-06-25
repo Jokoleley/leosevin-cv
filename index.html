@@ -156,7 +156,7 @@
   <!-- Nav class 2 -->
   <nav class="hide-on-large only trigger z-depth-1">
     <button id="mobile-summary-toggle" aria-label="Toggle visibility of the mobile navbar" data-activates="slide-out"
-      class="button-collapse" style="display:inline-block; background:#112240 ; color:#fff; border-radius:50%; width:48px; height:48px; text-align:center; line-height:48px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin:8px 16px 8px 8px; font-size:28px; border:none; cursor:pointer;">
+      class="button-collapse" role="button" tabindex="0" style="display:inline-block; background:#112240 ; color:#fff; border-radius:50%; width:48px; height:48px; text-align:center; line-height:48px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin:8px 16px 8px 8px; font-size:28px; border:none; cursor:pointer; outline:none; transition:background 0.2s;">
       <span style="display:inline-block; vertical-align:middle; width:24px; height:24px;">
         <span style="display:block; width:24px; height:3px; background:#fff; margin:4px 0; border-radius:2px;"></span>
         <span style="display:block; width:24px; height:3px; background:#fff; margin:4px 0; border-radius:2px;"></span>
@@ -722,38 +722,62 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
   </script>
 
   <script>
-    // Mobile menu toggle for summary button
+    // Improved mobile menu toggle for summary button
     document.addEventListener('DOMContentLoaded', function () {
       var $sideNav = document.getElementById('slide-out');
       var $toggle = document.getElementById('mobile-summary-toggle');
+      var isOpen = false;
+      var closeMenu = function() {
+        $sideNav.classList.remove('open');
+        $sideNav.style.transform = '';
+        $sideNav.style.display = 'none';
+        isOpen = false;
+        document.removeEventListener('mousedown', outsideClickHandler);
+        document.removeEventListener('touchstart', outsideClickHandler);
+      };
+      function outsideClickHandler(ev) {
+        if ($sideNav.classList.contains('open') &&
+            !ev.target.closest('#slide-out') &&
+            !ev.target.closest('#mobile-summary-toggle')) {
+          closeMenu();
+        }
+      }
       if ($toggle && $sideNav) {
+        var openMenu = function() {
+          $sideNav.classList.add('open');
+          $sideNav.style.transform = 'translateX(0%)';
+          $sideNav.style.display = 'block';
+          isOpen = true;
+          setTimeout(function() {
+            document.addEventListener('mousedown', outsideClickHandler);
+            document.addEventListener('touchstart', outsideClickHandler);
+          }, 0);
+        };
         $toggle.addEventListener('click', function (e) {
           e.preventDefault();
-          if ($sideNav.classList.contains('open')) {
-            $sideNav.classList.remove('open');
-            $sideNav.style.transform = '';
-            $sideNav.style.display = 'none';
-          } else {
-            $sideNav.classList.add('open');
-            $sideNav.style.transform = 'translateX(0%)';
-            $sideNav.style.display = 'block';
-            // Close menu when clicking outside
-            setTimeout(function() {
-              document.addEventListener('mousedown', function handler(ev) {
-                if ($sideNav.classList.contains('open') &&
-                  !ev.target.closest('#slide-out') &&
-                  !ev.target.closest('#mobile-summary-toggle')) {
-                  $sideNav.classList.remove('open');
-                  $sideNav.style.transform = '';
-                  $sideNav.style.display = 'none';
-                  document.removeEventListener('mousedown', handler);
-                }
-              });
-            }, 0);
+          // Always open the menu on click
+          if (!$sideNav.classList.contains('open')) {
+            openMenu();
           }
+        });
+        // Keyboard accessibility: open/close with Enter or Space
+        $toggle.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!$sideNav.classList.contains('open')) {
+              openMenu();
+            }
+          }
+        });
+        // Optional: close menu on navigation link click
+        $sideNav.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            if (isOpen) closeMenu();
+          });
         });
       }
     });
   </script>
+  <!-- End improved mobile menu toggle -->
 </body>
 </html>
