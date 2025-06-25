@@ -722,62 +722,123 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
   </script>
 
   <script>
-    // Improved mobile menu toggle for summary button
-    document.addEventListener('DOMContentLoaded', function () {
+    // FINAL: Reliable mobile menu toggle for summary button
+    (function () {
       var $sideNav = document.getElementById('slide-out');
       var $toggle = document.getElementById('mobile-summary-toggle');
+      if (!$sideNav || !$toggle) return;
       var isOpen = false;
-      var closeMenu = function() {
-        $sideNav.classList.remove('open');
-        $sideNav.style.transform = '';
+      function openMenu() {
+        $sideNav.style.display = 'block';
+        $sideNav.style.position = 'fixed';
+        $sideNav.style.top = '0';
+        $sideNav.style.left = '0';
+        $sideNav.style.height = '100vh';
+        $sideNav.style.width = '80vw';
+        $sideNav.style.maxWidth = '320px';
+        $sideNav.style.background = '#fff';
+        $sideNav.style.zIndex = '9999';
+        $sideNav.style.boxShadow = '2px 0 8px rgba(0,0,0,0.15)';
+        document.body.style.overflow = 'hidden';
+        isOpen = true;
+        setTimeout(function() {
+          document.addEventListener('mousedown', outsideClickHandler);
+          document.addEventListener('touchstart', outsideClickHandler);
+        }, 0);
+      }
+      function closeMenu() {
         $sideNav.style.display = 'none';
+        document.body.style.overflow = '';
         isOpen = false;
         document.removeEventListener('mousedown', outsideClickHandler);
         document.removeEventListener('touchstart', outsideClickHandler);
-      };
+      }
       function outsideClickHandler(ev) {
-        if ($sideNav.classList.contains('open') &&
-            !ev.target.closest('#slide-out') &&
-            !ev.target.closest('#mobile-summary-toggle')) {
+        if (isOpen && !$sideNav.contains(ev.target) && !$toggle.contains(ev.target)) {
           closeMenu();
         }
       }
-      if ($toggle && $sideNav) {
-        var openMenu = function() {
-          $sideNav.classList.add('open');
-          $sideNav.style.transform = 'translateX(0%)';
-          $sideNav.style.display = 'block';
-          isOpen = true;
-          setTimeout(function() {
-            document.addEventListener('mousedown', outsideClickHandler);
-            document.addEventListener('touchstart', outsideClickHandler);
-          }, 0);
-        };
-        $toggle.addEventListener('click', function (e) {
+      $toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+      $toggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          // Always open the menu on click
-          if (!$sideNav.classList.contains('open')) {
+          if (isOpen) {
+            closeMenu();
+          } else {
             openMenu();
           }
+        }
+      });
+      $sideNav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (isOpen) closeMenu();
         });
-        // Keyboard accessibility: open/close with Enter or Space
-        $toggle.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (!$sideNav.classList.contains('open')) {
-              openMenu();
-            }
-          }
-        });
-        // Optional: close menu on navigation link click
-        $sideNav.querySelectorAll('a').forEach(function(link) {
-          link.addEventListener('click', function() {
-            if (isOpen) closeMenu();
-          });
-        });
-      }
-    });
+      });
+      // Accessibility: close on Escape key
+      document.addEventListener('keydown', function (e) {
+        if (isOpen && e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+    })();
   </script>
   <!-- End improved mobile menu toggle -->
+
+  <script>
+    // Mobile menu toggle logic
+    document.addEventListener('DOMContentLoaded', function () {
+      const menuButton = document.getElementById('mobile-summary-toggle');
+      const mobileMenu = document.getElementById('slide-out');
+      let menuOpen = false;
+
+      function openMenu() {
+        mobileMenu.style.display = 'block';
+        menuOpen = true;
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+      }
+      function closeMenu() {
+        mobileMenu.style.display = 'none';
+        menuOpen = false;
+        document.body.style.overflow = '';
+      }
+
+      menuButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!menuOpen) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function (e) {
+        if (menuOpen && !mobileMenu.contains(e.target) && e.target !== menuButton) {
+          closeMenu();
+        }
+      });
+
+      // Close menu when clicking a link inside
+      mobileMenu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          closeMenu();
+        });
+      });
+
+      // Accessibility: close on Escape key
+      document.addEventListener('keydown', function (e) {
+        if (menuOpen && e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
