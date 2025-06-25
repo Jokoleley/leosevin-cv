@@ -244,7 +244,7 @@
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-
+cd "c:\Users\sevin\Desktop\CODAGE\PE PORTFOLIO"
                   </span>
               </a> -->
             </div>
@@ -718,34 +718,41 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
     // Materialize - Initializers
     $(document).ready(function () {
       $(".scrollspy").scrollSpy();
-      var $sideNav = $('#slide-out');
-      var $toggle = $('#mobile-summary-toggle');
-      function openMenu() {
-        $sideNav.addClass('open').css({transform: 'translateX(0%)', display: 'block'});
-        // Add event listener to close menu when clicking outside
-        setTimeout(function() {
-          $(document).on('mousedown.closeMenu', function(e) {
-            // Only close if click is outside BOTH the menu and the toggle button
-            if ($sideNav.hasClass('open') &&
-                !$(e.target).closest('#slide-out').length &&
-                !$(e.target).closest('#mobile-summary-toggle').length) {
-              closeMenu();
-            }
-          });
-        }, 0);
+    });
+  </script>
+
+  <script>
+    // Mobile menu toggle for summary button
+    document.addEventListener('DOMContentLoaded', function () {
+      var $sideNav = document.getElementById('slide-out');
+      var $toggle = document.getElementById('mobile-summary-toggle');
+      if ($toggle && $sideNav) {
+        $toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          if ($sideNav.classList.contains('open')) {
+            $sideNav.classList.remove('open');
+            $sideNav.style.transform = '';
+            $sideNav.style.display = 'none';
+          } else {
+            $sideNav.classList.add('open');
+            $sideNav.style.transform = 'translateX(0%)';
+            $sideNav.style.display = 'block';
+            // Close menu when clicking outside
+            setTimeout(function() {
+              document.addEventListener('mousedown', function handler(ev) {
+                if ($sideNav.classList.contains('open') &&
+                  !ev.target.closest('#slide-out') &&
+                  !ev.target.closest('#mobile-summary-toggle')) {
+                  $sideNav.classList.remove('open');
+                  $sideNav.style.transform = '';
+                  $sideNav.style.display = 'none';
+                  document.removeEventListener('mousedown', handler);
+                }
+              });
+            }, 0);
+          }
+        });
       }
-      function closeMenu() {
-        $sideNav.removeClass('open').css({transform: '', display: 'none'});
-        $(document).off('mousedown.closeMenu');
-      }
-      $toggle.on('click', function (e) {
-        e.preventDefault();
-        if ($sideNav.hasClass('open')) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
     });
   </script>
 </body>
