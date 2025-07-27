@@ -228,11 +228,6 @@
                   <i class="fa fa-linkedin"></i>
                 </button>
               </a>
-              <a href="https://github.com/Jokoleley" target="_blank">
-                <button class="icon-btn github">
-                  <i class="fa fa-github"></i>
-                </button>
-              </a>
 
               <!-- <a href="https://angel.co/u/Léo_bhogayata" target="_blank">
                 <button class="icon-btn angellist">
@@ -403,7 +398,7 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
       <li style="list-style:none; text-align:center; font-weight:bold; color:#233554; font-size:1.12rem; margin-bottom:8px;">
         Physical Education Teacher
       </li>
-      <li>Lead Physical Education programming</li>
+      <li>Lead Physical Education programmation</li>
       <li>Assessed students for the baccalaureate</li>
     </ul>
   </div>
@@ -471,7 +466,7 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
   <li style="list-style:none; text-align:center; font-weight:bold; color:#233554 ; font-size:1.12rem; margin-bottom:8px;">
     Physical Education Teacher
   </li>
-  <li>Lead Physical Education programming</li>
+  <li>Lead Physical Education programmation</li>
   <li>Teaching students from Year 3 to Year 12</li>
   <li>Maintain the connection with the sponsors (Nike, Air France, Sofitel, ...)</li>
 </ul>
@@ -659,9 +654,11 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
       <h3 class="page-title white-text teal">Contact</h3>
       <div class="container">
         <p>
-          <a aria-label="Call Léo" data-position="top" data-tooltip="Call Léo"
-            class="btn-floating btn-large waves-effect waves-light blue-grey tooltipped"><i class="fa fa-phone"></i><a
-              aria-label="Call Léo">WhatsApp +225 0767965805</a></a>
+          <a aria-label="Call Léo" href="https://wa.me/2250767965805" target="_blank" data-position="top" data-tooltip="Call Léo"
+            class="btn-floating btn-large waves-effect waves-light blue-grey tooltipped">
+            <i class="fa fa-phone"></i>
+          </a>
+          <a aria-label="Call Léo" href="https://wa.me/2250767965805" target="_blank" class="hoverline">WhatsApp +225 0767965805</a>
         </p>
         <p>
           <a aria-label="Email Léo" href="mailto:leosevineps@gmail.com" target="_blank" data-position="top"
@@ -677,12 +674,7 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
               class="hoverline" target="_blank">https://www.linkedin.com/in/l%C3%A9o-sevin-26a22420b/</a></a>
         </p>
       
-        <p>
-          <a aria-label="View Leo on GitHub" href="https://github.com/Jokoleley" target="_blank"
-            data-position="top" data-tooltip="View Leo on GitHub"
-            class="btn-floating btn-large waves-effect waves-light blue-grey tooltipped"><i class="fa fa-github"></i><a
-              aria-label="Leo on Github" href="https://github.com/Jokoleley" class="hoverline"
-              target="_blank">https://github.com/Jokoleley</a></a>
+       
         </p>
         </p>
       </div>
@@ -832,5 +824,18 @@ I enjoy new challenges and adapt easily. Wheter it’s working with different sp
       });
     });
   </script>
+
+  <script>
+  document.querySelectorAll('a.readme, a.contactme').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var targetId = this.getAttribute('href').replace('#', '');
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
 </body>
 </html>
